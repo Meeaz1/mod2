@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+void inputArray(double *arr, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("Введіть елемент arr[%d]: ", i + 1);
+        while (scanf("%lf", &arr[i]) != 1) {
+            printf("Некоректний ввід. Спробуйте ще раз: ");
+            while (getchar() != '\n'); 
+        }
+    }
+}
+
+void outputArray(double *arr, int n) {
+    printf("Елементи масиву: ");
+    for (int i = 0; i < n; i++) {
+        printf("%.2f ", arr[i]);
+    }
+    printf("\n");
+}
+
+double calculateSumOfAbs(double *arr, int n) {
+    double sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += fabs(arr[i]);
+    }
+    return sum;
+}
+
+int main() {
+    int n;
+    int choice;
+    double *arr = NULL;
+
+    while (1) {
+        printf("\nМеню:\n");
+        printf("1. Ввести елементи масиву\n");
+        printf("2. Вивести елементи масиву\n");
+        printf("3. Обчислити суму модулів елементів масиву\n");
+        printf("4. Вийти\n");
+        printf("Ваш вибір: ");
+        
+        while (scanf("%d", &choice) != 1) {
+            printf("Некоректний ввід. Спробуйте ще раз: ");
+            while (getchar() != '\n'); 
+        }
+
+        switch (choice) {
+            case 1:
+                printf("Введіть кількість елементів масиву (натуральне число): ");
+                while (scanf("%d", &n) != 1 || n <= 0) {
+                    printf("Некоректний ввід. Спробуйте ще раз: ");
+                    while (getchar() != '\n'); 
+                }
+                arr = (double *)malloc(n * sizeof(double));
+                if (arr == NULL) {
+                    printf("Помилка виділення пам'яті.\n");
+                    return 1;
+                }
+                inputArray(arr, n);
+                break;
+            case 2:
+                if (arr == NULL) {
+                    printf("Масив ще не введений.\n");
+                } else {
+                    outputArray(arr, n);
+                }
+                break;
+            case 3:
+                if (arr == NULL) {
+                    printf("Масив ще не введений.\n");
+                } else {
+                    double sum = calculateSumOfAbs(arr, n);
+                    printf("Сума модулів елементів масиву: %.2f\n", sum);
+                }
+                break;
+            case 4:
+                free(arr); 
+                printf("Вихід з програми.\n");
+                return 0;
+            default:
+                printf("Некоректний вибір. Спробуйте ще раз.\n");
+        }
+    }
+    return 0;
+}
