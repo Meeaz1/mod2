@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <math.h>
+
+void inputPoint(double *x, double *y) {
+    printf("Введіть координату x: ");
+    while (scanf("%lf", x) != 1) {
+        printf("Некоректний ввід. Спробуйте ще раз: ");
+        while (getchar() != '\n'); 
+    }
+    printf("Введіть координату y: ");
+    while (scanf("%lf", y) != 1) {
+        printf("Некоректний ввід. Спробуйте ще раз: ");
+        while (getchar() != '\n'); 
+    }
+}
+
+double calculateDistance(double x1, double y1, double x2, double y2) {
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+
+double calculateArea(double a, double b, double c) {
+    double s = (a + b + c) / 2;
+    return sqrt(s * (s - a) * (s - b) * (s - c));
+}
+
+int main() {
+    double x1[3], y1[3], x2[3], y2[3];
+    double side1[3], side2[3];
+    double area1 = 0, area2 = 0; 
+    int choice;
+
+    while (1) {
+        printf("\nМеню:\n");
+        printf("1. Ввести координати першого трикутника\n");
+        printf("2. Ввести координати другого трикутника\n");
+        printf("3. Вивести координати трикутників\n");
+        printf("4. Обчислити площі трикутників\n");
+        printf("5. Визначити, який трикутник має більшу площу\n");
+        printf("6. Вийти\n");
+        printf("Ваш вибір: ");
+        
+        while (scanf("%d", &choice) != 1) {
+            printf("Некоректний ввід. Спробуйте ще раз: ");
+            while (getchar() != '\n'); 
+        }
+
+        switch (choice) {
+            case 1:
+                for (int i = 0; i < 3; i++) {
+                    printf("Введіть координати вершини %d першого трикутника:\n", i + 1);
+                    inputPoint(&x1[i], &y1[i]);
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 3; i++) {
+                    printf("Введіть координати вершини %d другого трикутника:\n", i + 1);
+                    inputPoint(&x2[i], &y2[i]);
+                }
+                break;
+            case 3:
+                printf("Координати першого трикутника:\n");
+                for (int i = 0; i < 3; i++) {
+                    printf("(%.2f, %.2f)\n", x1[i], y1[i]);
+                }
+                printf("Координати другого трикутника:\n");
+                for (int i = 0; i < 3; i++) {
+                    printf("(%.2f, %.2f)\n", x2[i], y2[i]);
+                }
+                break;
+            case 4:
+                for (int i = 0; i < 3; i++) {
+                    side1[i] = calculateDistance(x1[i], y1[i], x1[(i + 1) % 3], y1[(i + 1) % 3]);
+                    side2[i] = calculateDistance(x2[i], y2[i], x2[(i + 1) % 3], y2[(i + 1) % 3]);
+                }
+                area1 = calculateArea(side1[0], side1[1], side1[2]);
+                area2 = calculateArea(side2[0], side2[1], side2[2]);
+                printf("Площа першого трикутника: %.2f\n", area1);
+                printf("Площа другого трикутника: %.2f\n", area2);
+                break;
+            case 5:
+                if (area1 > area2) {
+                    printf("Перший трикутник має більшу площу.\n");
+                } else if (area2 > area1) {
+                    printf("Другий трикутник має більшу площу.\n");
+                } else {
+                    printf("Трикутники мають однакову площу.\n");
+                }
+                break;
+            case 6:
+                printf("Вихід з програми.\n");
+                return 0;
+            default:
+                printf("Некоректний вибір. Спробуйте ще раз.\n");
+        }
+    }
+    return 0;
+}
